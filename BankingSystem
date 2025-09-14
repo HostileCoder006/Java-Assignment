@@ -1,0 +1,171 @@
+import java.util.Scanner;
+
+// A class to represent a bank account.
+class Account {
+    private int accountNumber;
+    private String name;
+    private String email;
+    private String phone;
+    private double balance;
+
+    // Constructor to create a new Account object.
+    public Account(int accountNumber, String name, double balance, String email, String phone) {
+        this.accountNumber = accountNumber;
+        this.name = name;
+        this.balance = balance;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    // Getters and setters for the account properties.
+    public int getAccountNumber() {
+        return accountNumber;
+    }
+
+    // Method to deposit money into the account.
+    public void deposit(double amount) {
+        if (amount > 0) {
+            this.balance += amount;
+            System.out.println("Deposit successful. New balance: " + this.balance);
+        } else {
+            System.out.println("Invalid deposit amount.");
+        }
+    }
+
+    // Method to withdraw money from the account.
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= this.balance) {
+            this.balance -= amount;
+            System.out.println("Withdrawal successful. New balance: " + this.balance);
+        } else {
+            System.out.println("Invalid withdrawal amount or insufficient balance.");
+        }
+    }
+
+    // Method to update account contact information.
+    public void update(String email, String phone) {
+        this.email = email;
+        this.phone = phone;
+        System.out.println("Contact information updated.");
+    }
+
+    // Method to display account details.
+    public void show() {
+        System.out.println("Account Number: " + this.accountNumber);
+        System.out.println("Name: " + this.name);
+        System.out.println("Balance: " + this.balance);
+        System.out.println("Email: " + this.email);
+        System.out.println("Phone: " + this.phone);
+    }
+}
+
+// The main class for the banking application.
+public class BankingApp {
+    private static Account[] accounts = new Account[100];
+    private static int count = 0;
+    private static Scanner scanner = new Scanner(System.in);
+
+    // Method to find an account by account number.
+    private static Account find(int accNo) {
+        for (int i = 0; i < count; i++) {
+            if (accounts[i].getAccountNumber() == accNo) {
+                return accounts[i];
+            }
+        }
+        return null; // Return null if account is not found
+    }
+
+    public static void main(String[] args) {
+        while (true) {
+            System.out.println("\n--- Banking Menu ---");
+            System.out.println("1. Create new account");
+            System.out.println("2. Deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. View account details");
+            System.out.println("5. Update contact details");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter initial balance: ");
+                    double balance = scanner.nextDouble();
+                    scanner.nextLine(); // Consume the newline
+                    System.out.print("Enter email: ");
+                    String email = scanner.nextLine();
+                    System.out.print("Enter phone: ");
+                    String phone = scanner.nextLine();
+                    int newAccNo = 1000 + count;
+                    accounts[count] = new Account(newAccNo, name, balance, email, phone);
+                    count++;
+                    System.out.println("Account created successfully. Your account number is: " + newAccNo);
+                    break;
+                case 2:
+                    System.out.print("Enter account number: ");
+                    int accNo2 = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Enter amount to deposit: ");
+                    double amount2 = scanner.nextDouble();
+                    scanner.nextLine();
+                    Account acc2 = find(accNo2);
+                    if (acc2 != null) {
+                        acc2.deposit(amount2);
+                    } else {
+                        System.out.println("Account not found.");
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter account number: ");
+                    int accNo3 = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Enter amount to withdraw: ");
+                    double amount3 = scanner.nextDouble();
+                    scanner.nextLine();
+                    Account acc3 = find(accNo3);
+                    if (acc3 != null) {
+                        acc3.withdraw(amount3);
+                    } else {
+                        System.out.println("Account not found.");
+                    }
+                    break;
+                case 4:
+                    System.out.print("Enter account number: ");
+                    int accNo4 = scanner.nextInt();
+                    scanner.nextLine();
+                    Account acc4 = find(accNo4);
+                    if (acc4 != null) {
+                        acc4.show();
+                    } else {
+                        System.out.println("Account not found.");
+                    }
+                    break;
+                case 5:
+                    System.out.print("Enter account number: ");
+                    int accNo5 = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Enter new email: ");
+                    String newEmail = scanner.nextLine();
+                    System.out.print("Enter new phone: ");
+                    String newPhone = scanner.nextLine();
+                    Account acc5 = find(accNo5);
+                    if (acc5 != null) {
+                        acc5.update(newEmail, newPhone);
+                    } else {
+                        System.out.println("Account not found.");
+                    }
+                    break;
+                case 6:
+                    System.out.println("Exiting application. Thank you!");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
+
